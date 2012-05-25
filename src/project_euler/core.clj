@@ -1,4 +1,5 @@
-(ns project-euler.core)
+(ns project-euler.core
+  (:require [clojure.string :as string]))
 
 (defn problem1
   ([] (problem1 1000))
@@ -31,3 +32,10 @@
 (defn problem3
   ([] (problem3 600851475143))
   ([n] (reduce max (prime-factors-of n))))
+
+(defn is-palindrome? [s]
+  (= (str s) (string/join (reverse (str s)))))
+
+(defn problem4 []
+  (apply max (filter is-palindrome? (for [x (range 100 1000) y (range 100 1000)] (* x y)))))
+
