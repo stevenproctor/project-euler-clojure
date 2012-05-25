@@ -1,8 +1,8 @@
 (ns project-euler.core)
 
 (defn problem1
-  []
-  (reduce + (filter #(or (zero? (rem % 3)) (zero? (rem % 5))) (range 1000))))
+  ([] (problem1 1000))
+  ([n] (reduce + (filter #(or (zero? (rem % 3)) (zero? (rem % 5))) (range n)))))
 
 (defn skip-n
   [n s]
@@ -28,5 +28,6 @@
 (defn prime-factors-of [n]
   (factors-starting-at 2 n))
 
-(defn problem3 []
-  (reduce max (prime-factors-of 600851475143)))
+(defn problem3
+  ([] (problem3 600851475143))
+  ([n] (reduce max (prime-factors-of n))))
