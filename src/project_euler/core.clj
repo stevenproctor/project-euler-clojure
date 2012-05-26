@@ -1,6 +1,7 @@
 (ns project-euler.core
-  (:require [clojure.string :as string]
-            clojure.math.numeric-tower))
+  (:require 
+            [clojure.string :as string])
+  (:use clojure.math.numeric-tower))
 
 (defn problem1
   ([] (problem1 1000))
@@ -43,3 +44,9 @@
 (defn problem5
   ([] (problem5 20))
   ([n] (reduce lcm 1 (range 2 (inc n)))))
+
+(defn problem6
+  ([] (problem6 100))
+  ([n] (bigint (-
+         (Math/pow (reduce + (range 1 (inc n))) 2)
+         (reduce + (map #(Math/pow % 2) (range 1 (inc n))))))))
