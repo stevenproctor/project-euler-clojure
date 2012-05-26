@@ -1,5 +1,6 @@
 (ns project-euler.core
-  (:require [clojure.string :as string]))
+  (:require [clojure.string :as string]
+            clojure.math.numeric-tower))
 
 (defn problem1
   ([] (problem1 1000))
@@ -39,3 +40,6 @@
 (defn problem4 []
   (apply max (filter is-palindrome? (for [x (range 100 1000) y (range 100 1000)] (* x y)))))
 
+(defn problem5
+  ([] (problem5 20))
+  ([n] (reduce lcm 1 (range 2 (inc n)))))
