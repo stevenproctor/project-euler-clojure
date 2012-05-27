@@ -50,3 +50,15 @@
   ([n] (bigint (-
          (Math/pow (reduce + (range 1 (inc n))) 2)
          (reduce + (map #(Math/pow % 2) (range 1 (inc n))))))))
+
+(defn is-prime? [n]
+  (cond (<= n 1) false
+        (= n 2) true
+        :else (loop [f 2]
+                (cond (zero? (rem n f)) false
+                      (> f (Math/sqrt n)) true
+                      :else (recur (inc f))))))
+
+(defn problem7
+  ([] (problem7 10001))
+  ([n] (first (skip-n (dec n) (filter is-prime? (iterate inc 1))))))
