@@ -11,7 +11,6 @@
   [n s]
   (cond
     (<= n 0) s
-    (= n 1) (rest s)
     :else (recur (dec n) (rest s))))
 
 (defn fib
