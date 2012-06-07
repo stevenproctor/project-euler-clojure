@@ -85,3 +85,6 @@
 (defn problem9 []
    (apply * (first (filter #(= (reduce + %) 1000) (pythagorean-triples)))))
 
+(defn problem10
+  ([] (problem10 2000000))
+  ([n] (bigint (reduce + (filter is-prime? (range 1 n)))) ))
