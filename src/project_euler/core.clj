@@ -13,6 +13,25 @@
 (defn sum [s]
   (reduce + s))
 
+(defn make-sorted-set [coll]
+  (into (sorted-set) coll))
+
+(defn primes-under [n]
+    (loop [sieve (set (cons 2 (range 3 n 2)))
+           f 3]
+      (if (> (square f) n)
+        sieve
+        (recur (difference sieve (range (square f) n f)) (inc f)))))
+
+(defn primes-under2 [n]
+  (let [sieve (transient (set (cons 2 (range 3 n 2))))]
+    (loop [s sieve
+           f 3]
+      (cond (> (square f) n) (persistent! s)
+            :else (recur (reduce disj! s (range (square f) n f)) (inc f))))))
+
+(defn prime? [n] (contains? (primes-under2 (inc n)) n))
+
 (defn problem1
   ([] (problem1 1000))
   ([n] (sum (filter #(or (factor-of? 3 %) (factor-of? 5 %))) (range n))))
@@ -44,11 +63,11 @@
   ([] (problem3 600851475143))
   ([n] (reduce max (prime-factors-of n))))
 
-(defn is-palindrome? [s]
+(defn palindrome? [s]
   (= (str s) (string/join (reverse (str s)))))
 
 (defn problem4 []
-  (apply max (filter is-palindrome? (for [x (range 100 1000) y (range 100 1000)] (* x y)))))
+  (apply max (filter palindrome? (for [x (range 100 1000) y (range 100 1000)] (* x y)))))
 
 (defn problem5
   ([] (problem5 20))
@@ -60,7 +79,7 @@
          (square (sum (range 1 (inc n))))
          (sum (map #(square %) (range 1 (inc n))))))))
 
-(defn is-prime? [n]
+(defn prime? [n]
   (cond (<= n 1) false
         (= n 2) true
         :else (loop [f 2]
@@ -70,7 +89,7 @@
 
 (defn problem7
   ([] (problem7 10001))
-  ([n] (first (skip-n (dec n) (filter is-prime? (iterate inc 1))))))
+  ([n] (first (skip-n (dec n) (filter prime? (iterate inc 1))))))
 
 (defn digits-of [n]
   (map #(Integer/parseInt (str %)) (str n)))
@@ -95,26 +114,7 @@
 (defn problem9 []
    (apply * (first (filter #(= (sum %) 1000) (pythagorean-triples)))))
 
-(defn prime? [n] (not-any? #(factor-of? % n) (range 2 (Math/sqrt n))))
-
 (defn problem10
   ([] (problem10 2000000))
-  ([n] (bigint (sum (filter is-prime? (range 1 n)))) ))
-
-(defn make-sorted-set [coll]
-  (into (sorted-set) coll))
-
-(defn primes-under [n]
-    (loop [sieve (set (cons 2 (range 3 n 2)))
-           f 3]
-      (if (> (square f) n)
-        sieve
-        (recur (difference sieve (range (square f) n f)) (inc f)))))
-
-(defn primes-under2 [n]
-  (let [sieve (transient (set (cons 2 (range 3 n 2))))]
-    (loop [s sieve
-           f 3]
-      (cond (> (square f) n) (persistent! s)
-            :else (recur (reduce disj! s (range (square f) n f)) (inc f))))))
+  ([n] (bigint (sum (primes-under2 n)))))
 
