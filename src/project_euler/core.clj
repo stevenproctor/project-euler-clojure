@@ -1,11 +1,21 @@
 (ns project-euler.core
   (:require 
             [clojure.string :as string])
-  (:use clojure.math.numeric-tower))
+  (:use clojure.math.numeric-tower
+        clojure.set))
+
+(defn factor-of? [f n]
+  (zero? (rem n f)))
+
+(defn square [n]
+  (* n n))
+
+(defn sum [s]
+  (reduce + s))
 
 (defn problem1
   ([] (problem1 1000))
-  ([n] (reduce + (filter #(or (zero? (rem % 3)) (zero? (rem % 5))) (range n)))))
+  ([n] (sum (filter #(or (factor-of? 3 %) (factor-of? 5 %))) (range n))))
 
 (defn skip-n
   [n s]
@@ -20,11 +30,11 @@
             (cons c (fib b c))))))
 
 (defn problem2 []
-  (reduce + (filter #(even? %) (take-while #(< % 4000000N) (skip-n 2 (fib))))))
+  (sum (filter #(even? %) (take-while #(< % 4000000N) (skip-n 2 (fib))))))
 
 (defn factors-starting-at [f n]
   (cond (= n 1) []
-        (zero? (rem n f)) (cons f (factors-starting-at f (/ n f)))
+        (factor-of? f n) (cons f (factors-starting-at f (/ n f)))
         :else (recur (inc f) n)))
 
 (defn prime-factors-of [n]
@@ -47,14 +57,14 @@
 (defn problem6
   ([] (problem6 100))
   ([n] (bigint (-
-         (Math/pow (reduce + (range 1 (inc n))) 2)
-         (reduce + (map #(Math/pow % 2) (range 1 (inc n))))))))
+         (square (sum (range 1 (inc n))))
+         (sum (map #(square %) (range 1 (inc n))))))))
 
 (defn is-prime? [n]
   (cond (<= n 1) false
         (= n 2) true
         :else (loop [f 2]
-                (cond (zero? (rem n f)) false
+                (cond (factor-of? f n) false
                       (> f (Math/sqrt n)) true
                       :else (recur (inc f))))))
 
@@ -71,8 +81,8 @@
                  #(apply * %) (partition 5 1 (digits-of n))))))
 
 (defn pythagorean-triple-for [m n]
-  (let [mm (Math/pow m 2)
-        nn (Math/pow n 2)]
+  (let [mm (square m)
+        nn (square n)]
         (sort [(int (- mm nn)) (* 2 m n) (int (+ mm nn))])))
 
 (defn pythagorean-triples
@@ -83,8 +93,28 @@
         (recur (inc m) 1))))
 
 (defn problem9 []
-   (apply * (first (filter #(= (reduce + %) 1000) (pythagorean-triples)))))
+   (apply * (first (filter #(= (sum %) 1000) (pythagorean-triples)))))
+
+(defn prime? [n] (not-any? #(factor-of? % n) (range 2 (Math/sqrt n))))
 
 (defn problem10
   ([] (problem10 2000000))
-  ([n] (bigint (reduce + (filter is-prime? (range 1 n)))) ))
+  ([n] (bigint (sum (filter is-prime? (range 1 n)))) ))
+
+(defn make-sorted-set [coll]
+  (into (sorted-set) coll))
+
+(defn primes-under [n]
+    (loop [sieve (set (cons 2 (range 3 n 2)))
+           f 3]
+      (if (> (square f) n)
+        sieve
+        (recur (difference sieve (range (square f) n f)) (inc f)))))
+
+(defn primes-under2 [n]
+  (let [sieve (transient (set (cons 2 (range 3 n 2))))]
+    (loop [s sieve
+           f 3]
+      (cond (> (square f) n) (persistent! s)
+            :else (recur (reduce disj! s (range (square f) n f)) (inc f))))))
+
