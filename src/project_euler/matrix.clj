@@ -23,5 +23,10 @@
           (cond (>= coff cdim) (recur diags (inc roff) 0)
                 (>= roff rdim) diags
                 :else (recur
-                        (concat diags (conj [] (for [i (range 0 (min (- rdim roff) (- cdim coff)))] (matrix-get m (+ roff i) (+ coff i))))) roff (if (zero? roff) (inc coff) cdim))))))
+                        (concat diags
+                                (conj []
+                                      (for [i (range 0 (min (- rdim roff) (- cdim coff)))]
+                                           (matrix-get m (+ roff i) (+ coff i)))))
+                        roff
+                        (if (zero? roff) (inc coff) cdim))))))
 
