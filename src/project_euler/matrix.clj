@@ -14,19 +14,25 @@
 (defn matrix-get [m r c]
   (nth (nth m r) c))
 
-(defn diagonals [m]
+(defn row [m n]
+  (nth m n))
+
+(defn matrix-lines [m f]
   (let [rdim (count m)
         cdim (count (first m))]
-      (loop [diags []
-             roff 0
-             coff 0]
-          (cond (>= coff cdim) (recur diags (inc roff) 0)
-                (>= roff rdim) diags
-                :else (recur
-                        (concat diags
-                                (conj []
-                                      (for [i (range 0 (min (- rdim roff) (- cdim coff)))]
-                                           (matrix-get m (+ roff i) (+ coff i)))))
-                        roff
-                        (if (zero? roff) (inc coff) cdim))))))
+    (->> (for [r (range rdim), c (range cdim)]
+            {(f rdim cdim r c) [(matrix-get m r c)]})
+         (apply merge-with into)
+         vals)))
 
+(defn diagonals [m]
+  (matrix-lines m (fn [rdim cdim r c] (+ r (- cdim c)))))
+
+(defn reverse-diagonals [m]
+  (matrix-lines m (fn [rdim cdim r c] (+ r c))))
+
+(defn partition-diagonals [m n diagonals-fn]
+  (apply concat (map #(partition n 1 %) (diagonals-fn m))))
+
+(defn partition-every-diagonal [m n]
+  (concat (partition-diagonals m n diagonals) (partition-diagonals m n reverse-diagonals)))
