@@ -14,7 +14,7 @@
 (defn sum [s]
   (reduce + s))
 
-(defn multiple [s]
+(defn multiply [s]
   (reduce * s))
 
 (defn make-sorted-set [coll]
@@ -36,7 +36,7 @@
 
 (defn primes-under2 [n]
   (let [sieve (transient (set (cons 2 (range 3 n 2))))]
-    (loop [s sieve
+    (loop[s sieve
            f 3]
       (cond (> (square f) n) (persistent! s)
             :else (recur (reduce disj! s (range (square f) n f)) (inc f))))))
@@ -69,6 +69,9 @@
 
 (defn prime-factors-of [n]
   (factors-starting-at 2 n))
+
+(defn factors-count [n]
+  (multiply (map #(inc %) (vals (frequencies (prime-factors-of n))))))
 
 (defn problem3
   ([] (problem3 600851475143))
@@ -152,7 +155,16 @@
            [20 73 35 29 78 31 90  1 74 31 49 71 48 86 81 16 23 57  5 54]
            [ 1 70 54 71 83 51 54 69 16 92 33 48 61 43 52  1 89 19 67 48]]]
     (apply max
-           (map multiple
+           (map multiply
                 (concat (partition-rows m 4 1)
                         (partition-columns m 4 1)
                         (partition-every-diagonal m 4))))))
+
+(defn triangle-numbers
+  ([] (concat [1] (triangle-numbers 1 2)))
+  ([s n] (let [t (+ s n)]
+          (lazy-seq
+            (cons t (triangle-numbers t (inc n)))))))
+
+(defn problem12 []
+  (first (drop-while #(<= (factors-count %) 500) (triangle-numbers))))
