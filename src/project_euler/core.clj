@@ -271,3 +271,19 @@
                 20849603980134001723930671666823555245252804609722
                 53503534226472524250874054075591789781264330331690]]
     (bigint (reduce str "" (take 10 (digits-of (sum numbers)))))))
+
+(defn next-collatz [n]
+  (cond (<= n 1) nil
+   		(even? n) (/ n 2)
+        (odd? n) (+ (* 3 n) 1)))
+
+(defn collatz-count-for [n]
+  {:pre  [(pos? n)]}
+  (if (= n 1) 1
+      (inc (collatz-count-for (next-collatz n)))))
+
+(defn problem14
+  ([] (problem14 1000000))
+  ([n] (first (reduce (fn [memo x]
+            (if (> (second x) (second memo)) x memo))
+          (map #(vector % (collatz-count-for %)) (range 1 (inc n)))))))
