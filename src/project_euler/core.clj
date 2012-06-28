@@ -287,3 +287,15 @@
   ([n] (first (reduce (fn [memo x]
             (if (> (second x) (second memo)) x memo))
           (map #(vector % (collatz-count-for %)) (range 1 (inc n)))))))
+
+(defn fac [n]
+  (multiply (map bigdec (range 1 (inc n)))))
+
+(defn combination [n k]
+  (cond (zero? n) 0
+        (zero? k) 1
+        :else (/ (fac n) (* (fac (- n k)) (fac k)))))
+
+(defn problem15
+  ([] (problem15 20))
+  ([n] (combination (+ n n) n)))
