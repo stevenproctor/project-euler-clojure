@@ -299,3 +299,7 @@
 (defn problem15
   ([] (problem15 20))
   ([n] (combination (+ n n) n)))
+
+(defn problem16
+  ([] (problem16 1000))
+  ([n] (sum (digits-of (expt 2 n)))))
