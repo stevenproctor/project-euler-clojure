@@ -2,6 +2,7 @@
   (:require 
             [clojure.string :as string])
   (:use clojure.math.numeric-tower
+        clojure.pprint
         clojure.set
         project-euler.matrix))
 
@@ -303,3 +304,11 @@
 (defn problem16
   ([] (problem16 1000))
   ([n] (sum (digits-of (expt 2 n)))))
+
+(defn problem17
+  ([] (problem17 1000))
+  ([n] (sum (map
+              #(count (clojure.string/replace
+                (clojure.string/replace
+                  (cl-format nil "~R" %) "hundred " "hundred and ") #"[ -]" ""))
+              (range 1 (inc n))))))
