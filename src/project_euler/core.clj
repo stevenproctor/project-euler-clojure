@@ -1,4 +1,6 @@
 (ns project-euler.core
+  (:import org.joda.time.DateTime
+           org.joda.time.DateTimeConstants)
   (:require 
             [clojure.string :as string])
   (:use clojure.math.numeric-tower
@@ -351,3 +353,11 @@
       []
       triangle))))
 
+(defn sunday? [d]
+  (= DateTimeConstants/SUNDAY (.getDayOfWeek d)))
+
+(defn first-of-months-between [start end]
+  (take-while #(.isBefore % end) (iterate #(-> (.plusMonths % 1) (.withDayOfMonth 1)) start)))
+
+(defn problem19
+  [] (count (filter sunday? (first-of-months-between (DateTime. 1901 1 1 0 0) (DateTime. 2001 1 1 0 0)))))
