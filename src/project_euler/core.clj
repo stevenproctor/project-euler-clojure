@@ -129,7 +129,7 @@
         (recur (inc m) 1))))
 
 (defn problem9 []
-   (apply * (first (filter #(= (sum %) 1000) (pythagorean-triples)))))
+   (multiply (first (filter #(= (sum %) 1000) (pythagorean-triples)))))
 
 (defn problem10
   ([] (problem10 2000000))
