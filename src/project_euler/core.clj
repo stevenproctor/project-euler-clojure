@@ -361,3 +361,7 @@
 
 (defn problem19
   [] (count (filter sunday? (first-of-months-between (DateTime. 1901 1 1 0 0) (DateTime. 2001 1 1 0 0)))))
+
+(defn problem20
+  ([] (problem20 100))
+  ([n] (sum (digits-of (fac n)))))
