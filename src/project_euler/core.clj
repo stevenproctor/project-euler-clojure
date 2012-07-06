@@ -121,12 +121,12 @@
         nn (square n)]
         (sort [(int (- mm nn)) (* 2 m n) (int (+ mm nn))])))
 
-(defn pythagorean-triples
-  ([] (cons (pythagorean-triple-for 2 1) (pythagorean-triples 2 2)))
-  ([m n]
-      (if (< n m)
-        (lazy-seq (cons (pythagorean-triple-for m n) (pythagorean-triples m (inc n))))
-        (recur (inc m) 1))))
+
+(defn pythagorean-triples []
+  (for [m (range 2 500)
+        n (range 1 m)
+        k (range 1 500)]
+        (map (partial * k) (pythagorean-triple-for m n))))
 
 (defn problem9 []
    (multiply (first (filter #(= (sum %) 1000) (pythagorean-triples)))))
