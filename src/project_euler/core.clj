@@ -46,6 +46,16 @@
 
 (defn prime? [n] (contains? (primes-under2 (inc n)) n))
 
+(defn factors-of [n]
+  (sort (apply concat
+               (for [f (range 1 (Math/sqrt n))
+                     :when (factor-of? f n)]
+                 	[f (/ n f)]))))
+
+
+(defn proper-divisors [n]
+	(remove #(= % n) (factors-of n)))
+
 (defn problem1
   ([] (problem1 1000))
   ([n] (sum (filter #(or (factor-of? 3 %) (factor-of? 5 %))) (range n))))
@@ -365,3 +375,14 @@
 (defn problem20
   ([] (problem20 100))
   ([n] (sum (digits-of (fac n)))))
+
+
+(defn amicable? [a]
+  (letfn [(d [n]
+    		  (sum (proper-divisors n)))]
+    (let [b (d a)]
+	    (and (= a (d b)) (not= a b)))))
+
+(defn problem21
+  ([] (problem21 10000))
+  ([n] (sum (filter amicable? (range 1 n)))))
