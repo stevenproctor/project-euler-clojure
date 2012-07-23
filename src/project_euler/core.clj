@@ -386,3 +386,18 @@
 (defn problem21
   ([] (problem21 10000))
   ([n] (sum (filter amicable? (range 1 n)))))
+
+(defn letter-to-number [l]
+  (inc (- (int l) (int \A))))
+
+(defn name-score [n]
+  (sum (map letter-to-number n))) 
+
+(defn names-listing []
+  (sort (string/split (string/replace (slurp "./resources/names.txt") "\"" "") #",")))
+
+(defn problem22 []
+	(sum (map-indexed
+          (fn [i n] (* (inc i) (name-score n)))
+          (names-listing))))
+
