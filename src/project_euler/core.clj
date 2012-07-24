@@ -294,10 +294,11 @@
    		  (even? n) (/ n 2)
         (odd? n) (+ (* 3 n) 1)))
 
-(defn collatz-count-for [n]
+(def collatz-count-for
+  (memoize (fn [n]
   {:pre [(pos? n)]}
   (if (= n 1) 1
-      (inc (collatz-count-for (next-collatz n)))))
+      (inc (collatz-count-for (next-collatz n)))))))
 
 (defn problem14
   ([] (problem14 1000000))

@@ -7,4 +7,5 @@
                  [org.clojure/math.numeric-tower "0.0.1"]
                  [midje "1.4.0"]
                  [com.stuartsierra/lazytest "1.2.3"]]
-  :repositories {"stuartsierra-releases" "http://stuartsierra.com/maven2"})
+  :repositories {"stuartsierra-releases" "http://stuartsierra.com/maven2"}
+  :jvm-opts ["-Xmx768M"])
