@@ -286,20 +286,25 @@
     (bigint (reduce str "" (take 10 (digits-of (sum numbers)))))))
 
 (defn next-collatz [n]
+  "Generates the next number in the Collatz sequence for a given number
+  n, and returns nil when n is less than, or equal to, 1.  This is due
+  to the Collatz sequence generating an infinite sequence, since 1
+  evaluates to 4, which evaluates to 2, which evaluates to 1, ad infinitum."
   (cond (<= n 1) nil
-   		(even? n) (/ n 2)
+   		  (even? n) (/ n 2)
         (odd? n) (+ (* 3 n) 1)))
 
 (defn collatz-count-for [n]
-  {:pre  [(pos? n)]}
+  {:pre [(pos? n)]}
   (if (= n 1) 1
       (inc (collatz-count-for (next-collatz n)))))
 
 (defn problem14
   ([] (problem14 1000000))
-  ([n] (first (reduce (fn [memo x]
-            (if (> (second x) (second memo)) x memo))
-          (map #(vector % (collatz-count-for %)) (range 1 (inc n)))))))
+  ([n] (first (reduce
+                (fn [memo x]
+                  (if (> (second x) (second memo)) x memo))
+                (map #(vector % (collatz-count-for %)) (range 1 (inc n)))))))
 
 (defn fac [n]
   (multiply (map bigdec (range 1 (inc n)))))
