@@ -47,14 +47,14 @@
 (defn prime? [n] (contains? (primes-under2 (inc n)) n))
 
 (defn factors-of [n]
-  (sort (apply concat
-               (for [f (range 1 (Math/sqrt n))
+  (sort (distinct (apply concat
+               (for [f (range 1 (inc (Math/sqrt n)))
                      :when (factor-of? f n)]
-                 	[f (/ n f)]))))
+                 	[f (/ n f)])))))
 
 
 (defn proper-divisors [n]
-	(remove #(= % n) (factors-of n)))
+	(butlast (factors-of n)))
 
 (defn problem1
   ([] (problem1 1000))
@@ -407,3 +407,21 @@
           (fn [i n] (* (inc i) (name-score n)))
           (names-listing))))
 
+(defn abundant? [n]
+  (> (sum (proper-divisors n)) n))
+
+(defn abundant-numbers-under [n]
+  (filter abundant? (range 1 n)))
+
+(defn sums-of-two-abundant-numbers-under [n]
+  (let [abundant-numbers (abundant-numbers-under n)]
+    (filter #(< % n)
+            (map sum 
+              (mapcat (fn [n]
+                        (map #(vector n %)
+                             (filter #(<= n %) abundant-numbers)))
+                      abundant-numbers)))))
+
+(defn problem23 []
+  (let [sums (set (sums-of-two-abundant-numbers-under 28123))]
+    (reduce + (remove sums (range 0 28123)))))
