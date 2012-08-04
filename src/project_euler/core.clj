@@ -3,7 +3,8 @@
            org.joda.time.DateTimeConstants)
   (:require 
             [clojure.string :as string])
-  (:use clojure.math.numeric-tower
+  (:use clojure.math.combinatorics
+        clojure.math.numeric-tower
         clojure.pprint
         clojure.set
         project-euler.matrix))
@@ -425,3 +426,6 @@
 (defn problem23 []
   (let [sums (set (sums-of-two-abundant-numbers-under 28123))]
     (reduce + (remove sums (range 0 28123)))))
+
+(defn problem24 []
+  (nth (permutations (range 0 10)) 999999))
