@@ -429,3 +429,10 @@
 
 (defn problem24 []
   (nth (permutations (range 0 10)) 999999))
+
+(defn fibonacci []
+  (map first (iterate (fn [[a b]] (vector b (+ a b))) [1N 1N])))
+
+(defn problem25 []
+  (first (first (filter #(>= (second %) 1000)
+                (map-indexed #(vector (inc %) (count (digits-of %2))) (fibonacci))))))
