@@ -139,8 +139,11 @@
         k (range 1 500)]
         (map (partial * k) (pythagorean-triple-for m n))))
 
+(defn first-where [pred coll]
+  (first (filter pred coll)))
+
 (defn problem9 []
-   (multiply (first (filter #(= (sum %) 1000) (pythagorean-triples)))))
+   (multiply (first-where #(= (sum %) 1000) (pythagorean-triples))))
 
 (defn problem10
   ([] (problem10 2000000))
@@ -434,5 +437,6 @@
   (map first (iterate (fn [[a b]] (vector b (+ a b))) [1N 1N])))
 
 (defn problem25 []
-  (first (first (filter #(>= (second %) 1000)
-                (map-indexed #(vector (inc %) (count (digits-of %2))) (fibonacci))))))
+  (first (first-where #(>= (second %) 1000)
+                      (map-indexed #(vector (inc %) (count (digits-of %2)))
+                                   (fibonacci)))))
