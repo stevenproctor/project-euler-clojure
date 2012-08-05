@@ -440,3 +440,16 @@
   (first (first-where #(>= (second %) 1000)
                       (map-indexed #(vector (inc %) (count (digits-of %2)))
                                    (fibonacci)))))
+
+(defn repeating-decimal-length [n]
+  (cond (= 2 n) 0
+        (= 5 n) 0
+        (factor-of? 2 n) (recur (/ n 2))
+        (factor-of? 5 n) (recur (/ n 5))
+        (prime? n) (first-where #(factor-of? n (- (expt 10 %) 1)) (iterate inc 1))
+        :else (reduce lcm (map repeating-decimal-length (prime-factors-of n)))))
+
+(defn problem26 []
+  (first (apply max-key second
+                (map #(vector % (repeating-decimal-length %))
+                     (range 2 1000)))))
