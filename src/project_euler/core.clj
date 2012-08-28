@@ -53,13 +53,15 @@
                      :when (factor-of? f n)]
                  	[f (/ n f)])))))
 
+(defn has-factors-in? [n coll]
+  (some #(factor-of? % n) coll))
 
 (defn proper-divisors [n]
 	(butlast (factors-of n)))
 
 (defn problem1
   ([] (problem1 1000))
-  ([n] (sum (filter #(or (factor-of? 3 %) (factor-of? 5 %))) (range n))))
+  ([n] (sum (filter #(has-factors-in? % [3 5]) (range n)))))
 
 (defn skip-n
   [n s]
@@ -311,13 +313,13 @@
                   (if (> (second x) (second memo)) x memo))
                 (map #(vector % (collatz-count-for %)) (range 1 (inc n)))))))
 
-(defn fac [n]
-  (multiply (map bigdec (range 1 (inc n)))))
+(defn factorial [n]
+  (multiply (range 1M (inc (bigdec n)))))
 
 (defn combination [n k]
   (cond (zero? n) 0
         (zero? k) 1
-        :else (/ (fac n) (* (fac (- n k)) (fac k)))))
+        :else (/ (factorial n) (* (factorial (- n k)) (factorial k)))))
 
 (defn problem15
   ([] (problem15 20))
