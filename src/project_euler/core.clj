@@ -386,7 +386,7 @@
 
 (defn problem20
   ([] (problem20 100))
-  ([n] (sum (digits-of (fac n)))))
+  ([n] (sum (digits-of (factorial n)))))
 
 
 (defn amicable? [a]
